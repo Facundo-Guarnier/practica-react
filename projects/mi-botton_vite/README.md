@@ -1,10 +1,11 @@
-# Ejemplo basico de componentes y elementos en React
+# Descripción
+Ejemplo basico de componentes y elementos en React. 
+
+* Mi-buttom con diferentes properties
 
 ## Comandos:
-npm init -y
-mkdir project
-cd project
+```bash
 npm create vite@latest
-
 npm run start:dev
+```
 
