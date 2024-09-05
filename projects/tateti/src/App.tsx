@@ -6,49 +6,55 @@ import { useState } from 'react'
 import { LINEAS_GANADORAS } from './constantes/lineasGanadoras'
 
 function App() {
-
   const [tablero, setTablero] = useState(Array(9).fill(null))
   const [turn, setTurn] = useState(TURNOS.X)
-  const [ganador, setGanador] = useState(null)
+  const [ganador, setGanador] = useState('')
 
   function actualizarCasillero(index: number) {
+    //! Si el casillero ya está ocupado o ya hay un ganador, no hacer nada
     if (tablero[index] || ganador) {
       return null
     }
 
+    //! Actualizar el tablero
     const nuevoTablero = [...tablero]
     nuevoTablero[index] = turn
     setTablero(nuevoTablero)
     setTurn(turn === TURNOS.X ? TURNOS.O : TURNOS.X)
 
+    //! Verificar si hay un ganador
     //? Como hago para al mostrar el modal, el tablero ya esté actualizado?
     const ganadorNuevo = calcularGanador(nuevoTablero)
     setGanador(ganadorNuevo)
     if (ganadorNuevo) {
       abrirModalGanador(ganadorNuevo)
-    } else if (nuevoTablero.every(casillero => casillero)) {
+    } else if (nuevoTablero.every((casillero) => casillero)) {
       setGanador('Empate')
-      abrirMoodalEmpate()
+      abrirModalEmpate()
     }
   }
 
-  function abrirModalGanador(ganadorNuevo) {
+  function abrirModalGanador(ganadorNuevo: string) {
     alert(`Ganó ${ganadorNuevo}`)
   }
 
-  function abrirMoodalEmpate() {
+  function abrirModalEmpate() {
     alert('Empate')
   }
 
   function calcularGanador(tablero: string[]) {
     for (let i = 0; i < LINEAS_GANADORAS.length; i++) {
       const [a, b, c] = LINEAS_GANADORAS[i]
-      if (tablero[a] && tablero[a] === tablero[b] && tablero[a] === tablero[c]) {
+      if (
+        tablero[a] &&
+        tablero[a] === tablero[b] &&
+        tablero[a] === tablero[c]
+      ) {
         setGanador(tablero[a])
         return tablero[a]
       }
     }
-    return null
+    return ''
   }
 
   function resetGame() {
@@ -56,7 +62,6 @@ function App() {
     setTurn(TURNOS.X)
     setGanador(null)
   }
-
 
   return (
     <main className='tablero'>
@@ -72,7 +77,6 @@ function App() {
         tablero={tablero}
         actualizarCasillero={actualizarCasillero}
       ></Tablero>
-
     </main>
   )
 }
