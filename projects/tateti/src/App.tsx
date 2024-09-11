@@ -2,7 +2,7 @@ import './App.css'
 import "./index.css"
 import { TURNOS } from './constantes/turnos'
 import { Tablero } from './components/Tablero'
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { LINEAS_GANADORAS } from './constantes/lineasGanadoras'
 
 function App() {
@@ -31,23 +31,22 @@ function App() {
     setTurn(turn === TURNOS.X ? TURNOS.O : TURNOS.X)
 
     //! Verificar si hay un ganador
-    //? Como hago para al mostrar el modal, el tablero ya esté actualizado?
     const ganadorNuevo = calcularGanador(nuevoTablero)
     if (ganadorNuevo) {
       setGanador(ganadorNuevo)
-      // abrirModalGanador(ganadorNuevo)
     } else if (nuevoTablero.every((casillero) => casillero)) {
       setGanador('Empate')
-      // abrirModalEmpate()
     }
   }
 
   function abrirModalGanador(ganadorNuevo: string) {
-    alert(`Ganó ${ganadorNuevo}`)
+    // alert(`Ganó ${ganadorNuevo}`)
+    console.log(`Ganó ${ganadorNuevo}`)
   }
 
   function abrirModalEmpate() {
-    alert('Empate')
+    // alert('Empate')
+    console.log('Empate')
   }
 
   function calcularGanador(tablero: string[]) {
