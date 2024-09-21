@@ -1,16 +1,23 @@
 import { Casillero } from './Casillero'
 
-export function Tablero({ tablero, actualizarCasillero }) {
+
+interface TableroProps {
+  tablero: string[]
+  actualizarCasillero: (index: number) => void
+}
+
+export function Tablero({ tablero, actualizarCasillero }: TableroProps) {
   return (
-    <section className='juego'>
-      {tablero.map((_, index) => (
-        <Casillero
-          key={index}
-          index={index}
-          valor={tablero[index]}
-          actualizarCasillero={actualizarCasillero}
-        ></Casillero>
-      ))}
-    </section>
+      <section className='mt-8 grid grid-cols-3 gap-3'>
+        {tablero.map((_, index) => (
+          <Casillero
+            key={index}
+            index={index}
+            actualizarCasillero={actualizarCasillero}
+            >
+              {tablero[index]}
+            </Casillero>
+          ))}
+      </section>
   )
 }

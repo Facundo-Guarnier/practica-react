@@ -1,9 +1,10 @@
-import './App.css'
 import "./index.css"
 import { TURNOS } from './constantes/turnos'
 import { Tablero } from './components/Tablero'
-import { createContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LINEAS_GANADORAS } from './constantes/lineasGanadoras'
+import { BotonSuperior } from './components/BotonSuperior'
+import { ModalResultado } from "./components/ModalResultado"
 
 function App() {
 
@@ -23,13 +24,11 @@ function App() {
   }, [ganador])
   
   //! Contexto: Se utiliza para pasar datos a través de la jerarquía de componentes sin tener que pasar props manualmente en cada nivel
-  const temaContext = createContext('claro')
-  const [state, setState] = useState({ tema: 'claro' })
+  const [darkModeState, setDarkModeState] = useState(false)
 
-  function onClickTema() {
-    const tema = state.tema === 'claro' ? 'oscuro' : 'claro'
-    console.log(tema)
-    setState({ tema })
+  function onClickTema(): void {
+    document.documentElement.classList.toggle('dark')
+    setDarkModeState(!darkModeState)
   }
 
 
@@ -64,7 +63,7 @@ function App() {
     console.log('Empate')
   }
 
-  function calcularGanador(tablero: string[]) {
+  function calcularGanador(tablero: string[]): string {
     for (let i = 0; i < LINEAS_GANADORAS.length; i++) {
       const [a, b, c] = LINEAS_GANADORAS[i]
       if (
@@ -79,32 +78,44 @@ function App() {
     return ''
   }
 
-  function resetGame() {
+  function resetGame(): void {
+    console.log('Reset del juego')
     setTablero(Array(9).fill(''))
     setTurn(TURNOS.X)
     setGanador('')
   }
 
   return (
-    <main className='tablero'>
-      <h1>Tatetí</h1>
-      <button
-        onClick={resetGame}
-      >
-        Reset del juego
-      </button>
+    <section className='
+        m-0 flex justify-center items-center p-0 min-h-screen
+        transition-all duration-500
+        bg-blue-300 dark:bg-gray-700
+      '>
+      <main className='
+          h-fit w-fit m-10 text-center rounded-lg p-9
+          transition-all duration-500
+          bg-gray-100 dark:bg-gray-900 
+        '>
+        <h1 className=' 
+          mb-4 text-4xl font-bold 
+          transition-all duration-500
+          dark:text-white text-gray-900
+        '>Tatetí</h1>
 
-      <button
-        onClick={onClickTema}
-      >
-        Cambiar tema
-      </button>
+        <BotonSuperior onClick={resetGame}>Reset del juego</BotonSuperior>
+        <BotonSuperior onClick={onClickTema}>Cambiar tema</BotonSuperior> 
 
-      <Tablero
-        tablero={tablero}
-        actualizarCasillero={actualizarCasillero}
-      ></Tablero>
-    </main>
+        <Tablero
+          tablero={tablero}
+          actualizarCasillero={actualizarCasillero}
+        ></Tablero>
+        {ganador && (
+          <ModalResultado resetGame={resetGame}>
+            {ganador === 'Empate' ? 'Empate' : `Ganó ${ganador}`}
+          </ModalResultado>
+        )}
+      </main>
+    </section>
   )
 }
 
