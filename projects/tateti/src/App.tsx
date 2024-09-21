@@ -6,10 +6,14 @@ import { createContext, useEffect, useState } from 'react'
 import { LINEAS_GANADORAS } from './constantes/lineasGanadoras'
 
 function App() {
+
+  //! Estados: Son asincronos, no se actualizan inmediatamente
   const [tablero, setTablero] = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(TURNOS.X)
+  const [turn, setTurn] = useState(TURNOS.X) 
   const [ganador, setGanador] = useState('')
 
+  
+  //! Efectos: Se ejecutan después de que el componente se renderiza y cuando cambia el estado
   useEffect(() => {
     if (ganador === 'Empate') {
       abrirModalEmpate()
@@ -17,6 +21,17 @@ function App() {
       abrirModalGanador(ganador)
     }
   }, [ganador])
+  
+  //! Contexto: Se utiliza para pasar datos a través de la jerarquía de componentes sin tener que pasar props manualmente en cada nivel
+  const temaContext = createContext('claro')
+  const [state, setState] = useState({ tema: 'claro' })
+
+  function onClickTema() {
+    const tema = state.tema === 'claro' ? 'oscuro' : 'claro'
+    console.log(tema)
+    setState({ tema })
+  }
+
 
   function actualizarCasillero(index: number) {
     //! Si el casillero ya está ocupado o ya hay un ganador, no hacer nada
@@ -72,13 +87,18 @@ function App() {
 
   return (
     <main className='tablero'>
+      <h1>Tatetí</h1>
       <button
         onClick={resetGame}
       >
         Reset del juego
       </button>
 
-      <h1>Tatetí</h1>
+      <button
+        onClick={onClickTema}
+      >
+        Cambiar tema
+      </button>
 
       <Tablero
         tablero={tablero}
